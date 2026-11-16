@@ -1,14 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moalnajj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/14 14:44:01 by moalnajj          #+#    #+#             */
+/*   Updated: 2026/11/14 14:44:02 by moalnajj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-int	*init_ops(void)
+int	stack_size(t_stack *a)
 {
-	int	*ops;
+	int	i;
 
-	ops = malloc(11 * sizeof(int));
-	if (!ops)
-		exit(1);
-	ft_bzero(ops, 11 * sizeof(int));
-	return (ops);
+	i = 0;
+	while (a)
+	{
+		a = a->next;
+		i++;
+	}
+	return (i);
 }
 
 void	end_sort(int *ops, int disorder, int bench_flag, char *name)
@@ -16,19 +30,6 @@ void	end_sort(int *ops, int disorder, int bench_flag, char *name)
 	if (bench_flag)
 		bench(ops, disorder, name);
 	free(ops);
-}
-
-int	stack_size(t_stack *s)
-{
-	int	n;
-
-	n = 0;
-	while (s)
-	{
-		n++;
-		s = s->next;
-	}
-	return (n);
 }
 
 void	rotate_to_top(t_stack **s, char c, int pos, int *ops)
@@ -39,11 +40,37 @@ void	rotate_to_top(t_stack **s, char c, int pos, int *ops)
 	if (pos <= size / 2)
 	{
 		while (pos-- > 0)
-			rotate(s, c, ops);
+		{
+			if (c == 'a')
+				rotate_a(s, ops);
+			else
+				rotate_b(s, ops);
+		}
 	}
 	else
 	{
 		while (pos++ < size)
-			reverse_rotate(s, c, ops);
+		{
+			if (c == 'a')
+				reverse_rotate_a(s, ops);
+			else
+				reverse_rotate_b(s, ops);
+		}
 	}
+}
+
+void	rotate_to_top_simple(t_stack **s, int pos, int *ops)
+{
+	while (pos-- > 0)
+		rotate_a(s, ops);
+}
+
+int	num_pointers(char **strs)
+{
+	int	i;
+
+	i = 0;
+	while (strs[i])
+		i++;
+	return (i);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_medium.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: moalnajj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/14 14:47:21 by moalnajj          #+#    #+#             */
+/*   Updated: 2026/11/14 14:47:45 by moalnajj         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
 static int	ft_sqrt(int size)
@@ -44,7 +56,7 @@ static void	push_chunks_to_b(t_stack **a, t_stack **b, int size, int *ops)
 		if ((*a)->index <= pushed)
 		{
 			push_b(a, b, ops);
-			rotate(b, 'b', ops);
+			rotate_b(b, ops);
 			pushed++;
 		}
 		else if ((*a)->index <= pushed + chunk)
@@ -53,7 +65,7 @@ static void	push_chunks_to_b(t_stack **a, t_stack **b, int size, int *ops)
 			pushed++;
 		}
 		else
-			rotate(a, 'a', ops);
+			rotate_a(a, ops);
 	}
 }
 
@@ -73,13 +85,21 @@ void	sort_medium(t_stack **a, int size, int bench_flag)
 	t_stack	*b;
 
 	b = NULL;
-	ops = init_ops();
+	init_ops(&ops);
+	if (!ops)
+		return ;
 	disorder = compute_disorder(*a) * 10000;
+	if (size == 3)
+	{
+		sort_three(a, ops, disorder);
+		end_sort(ops, disorder, bench_flag, "Medium / O(n√n)");
+		return ;
+	}
 	if (disorder != 0)
 	{
 		index_stack(a);
 		push_chunks_to_b(a, &b, size, ops);
 		push_back_to_a(a, &b, ops);
 	}
-	end_sort(ops, disorder, bench_flag, "Medium / O(n*sqrt(n))");
+	end_sort(ops, disorder, bench_flag, "Medium / O(n√n)");
 }
